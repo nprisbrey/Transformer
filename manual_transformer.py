@@ -16,8 +16,8 @@ class manual_SDPA(nn.Module):
         """
         Args:
             q (tensor): The queries, of dimension (batch_size, d_k).
-            k (tensor): The keys, of dimension (d_k).
-            v (tensor): The values, of dimension (d_v).
+            k (tensor): The keys, of dimension (batch_size, d_k).
+            v (tensor): The values, of dimension (batch_size, d_v).
         """
         q_mul_k = torch.bmm(q, k.transpose(-2, -1))
         scaled = torch.div(q_mul_k, sqrt(k.shape[-1]))
@@ -32,9 +32,26 @@ class manual_MHA(nn.Module):
         Args:
             num_heads (int): Number of heads to concatenate together at end.
         """
+        self.v_lin_projs = (nn.Linear(in_features=D_MODEL,
+                                      out_features=D_MODEL/num_heads)
+                            for head in range(num_heads))
+        self.k_lin_projs = (nn.Linear(in_features=D_MODEL,
+                                      out_features=D_MODEL/num_heads)
+                            for head in range(num_heads))
+        self.q_lin_projs = (nn.Linear(in_features=D_MODEL,
+                                      out_features=D_MODEL/num_heads)
+                            for head in range(num_heads))
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        #TODO: Implement Multi-Headed Attention with heads
+
+    def forward(self, v: torch.Tensor, k: torch.Tensor, q: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            v (tensor): The values, of dimension (batch_size, D_MODEL).
+            k (tensor): The keys, of dimension (batch_size, D_MODEL).
+            q (tensor): The queries, of dimension (batch_size, D_MODEL).
+        """
+        #TODO: For each v, k, q in batches, run v, k, q through all lin_projs
+
         pass
 
 class manual_encoder(nn.Module):
