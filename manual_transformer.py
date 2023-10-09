@@ -11,6 +11,7 @@ class manual_SDPA(nn.Module):
         Args:
 
         """
+        super().__init__()
 
     def forward(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
         """
@@ -32,6 +33,7 @@ class manual_MHA(nn.Module):
         Args:
             num_heads (int): Number of heads to concatenate together at end.
         """
+        super().__init__()
         self.v_lin_projs = (nn.Linear(in_features=D_MODEL,
                                       out_features=D_MODEL/num_heads)
                             for head in range(num_heads))
@@ -61,6 +63,7 @@ class manual_encoder(nn.Module):
             d_model (int): Dimension of embeddings and tensors passed between
                 internal blocks of the encoder and decoder.
         """
+        super().__init__()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         pass
