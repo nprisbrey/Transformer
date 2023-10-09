@@ -16,9 +16,9 @@ class manual_SDPA(nn.Module):
     def forward(self, q: torch.Tensor, k: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
         """
         Args:
-            q (tensor): The queries, of dimension (batch_size, d_k).
-            k (tensor): The keys, of dimension (batch_size, d_k).
-            v (tensor): The values, of dimension (batch_size, d_v).
+            q (tensor): The queries, of dimension (batch_size, d_k, D_MODEL).
+            k (tensor): The keys, of dimension (batch_size, d_k, D_MODEL).
+            v (tensor): The values, of dimension (batch_size, d_v, D_MODEL).
         """
         q_mul_k = torch.bmm(q, k.transpose(-2, -1))
         scaled = torch.div(q_mul_k, sqrt(k.shape[-1]))
@@ -48,9 +48,9 @@ class manual_MHA(nn.Module):
     def forward(self, v: torch.Tensor, k: torch.Tensor, q: torch.Tensor) -> torch.Tensor:
         """
         Args:
-            v (tensor): The values, of dimension (batch_size, D_MODEL).
-            k (tensor): The keys, of dimension (batch_size, D_MODEL).
-            q (tensor): The queries, of dimension (batch_size, D_MODEL).
+            v (tensor): The values, of dimension (batch_size, d_v, D_MODEL).
+            k (tensor): The keys, of dimension (batch_size, d_k, D_MODEL).
+            q (tensor): The queries, of dimension (batch_size, d_k, D_MODEL).
         """
         #TODO: For each v, k, q in batches, run v, k, q through all lin_projs
 
